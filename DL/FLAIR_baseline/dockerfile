@@ -17,6 +17,12 @@ RUN apt-get -y update && \
     apt-get -y upgrade
 RUN apt-get install -y --no-install-recommends apt-utils
 
+# Install FLAIR-One baseline requirements
+COPY requirements.txt /opt/app/requirements.txt
+WORKDIR /opt/app
+RUN pip install -r requirements.txt
+WORKDIR /
+
 # Install Jupyterlab
 RUN pip install jupyterlab 
 ENV JUPYTER_ENABLE_LAB=yes
@@ -32,8 +38,10 @@ RUN chmod +x /usr/bin/tini
 RUN apt-get autoremove -y && \
     apt-get clean -y
 	
+# Define user and working directory
 USER tais
 WORKDIR /home/tais
 
+# Define entrypoint (Tini) and default command for new docker instance
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["jupyter", "lab", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
