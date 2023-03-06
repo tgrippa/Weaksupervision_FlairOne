@@ -1,0 +1,39 @@
+### DOCKER FILE DESCRIPTION 
+## Base image: pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime; 
+## Additionals 
+
+
+FROM pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime
+
+LABEL maintainer="tais.grippa@ulb.be"
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Add user
+RUN useradd -ms /bin/bash tais
+
+# Update & upgrade system
+RUN apt-get -y update && \
+    apt-get -y upgrade
+RUN apt-get install -y --no-install-recommends apt-utils
+
+# Install Jupyterlab
+RUN pip install jupyterlab 
+ENV JUPYTER_ENABLE_LAB=yes
+ENV PATH="$HOME/.local/bin:$PATH"
+
+# Add Tini. Tini operates as a process subreaper for jupyter. This prevents
+# kernel crashes.
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin/tini
+RUN chmod +x /usr/bin/tini
+
+# Reduce image size
+RUN apt-get autoremove -y && \
+    apt-get clean -y
+	
+USER tais
+WORKDIR /home/tais
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["jupyter", "lab", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
