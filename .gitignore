@@ -1,0 +1,4 @@
+# Ignore the compiled python script when commit
+*.pyc
+# Ignore jupyter notebook checkpoints
+.ipynb_checkpoints/
