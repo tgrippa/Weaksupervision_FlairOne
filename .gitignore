@@ -2,3 +2,5 @@
 *.pyc
 # Ignore jupyter notebook checkpoints
 .ipynb_checkpoints/
+# Ignore Pytorch's lightning_logs folder
+./lightning_logs
