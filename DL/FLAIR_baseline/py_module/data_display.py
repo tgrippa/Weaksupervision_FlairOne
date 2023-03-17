@@ -83,9 +83,12 @@ def convert_to_color(arr_2d: np.ndarray, palette: dict = lut_colors) -> np.ndarr
         arr_3d[m] = i
     return arr_3d
 
-def display_nomenclature() -> None:   
+def display_nomenclature(size=None) -> None:   
     GS = matplotlib.gridspec.GridSpec(1,2)
-    fig = plt.figure(figsize=(15,10))
+    if size=='small':
+        fig = plt.figure(figsize=(9,6))
+    else: 
+        fig = plt.figure(figsize=(15,10))
     fig.patch.set_facecolor('black')
 
     plt.figtext(0.73,0.92, "REDUCED (BASELINE) NOMENCLATURE", ha="center", va="top", fontsize=14, color="w")
