@@ -3,4 +3,4 @@
 # Ignore jupyter notebook checkpoints
 .ipynb_checkpoints/
 # Ignore Pytorch's lightning_logs folder
-.DL/FLAIR_baseline/lightning_logs/
+DL/FLAIR_baseline/lightning_logs/
