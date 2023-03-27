@@ -36,6 +36,9 @@ pip install jupyterlab
 JUPYTER_ENABLE_LAB=yes
 PATH="$HOME/.local/bin:$PATH"
 
+# Install WanDB Logger
+pip install wandb
+
 # Add Tini. Tini operates as a process subreaper for jupyter. This prevents
 # kernel crashes.
 TINI_VERSION=v0.18.0
