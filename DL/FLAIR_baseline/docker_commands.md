@@ -1,3 +1,5 @@
+## Docker
+
 Build the Docker image
 ```
 cd DL/FLAIR_Baseline
@@ -14,12 +16,19 @@ Check the log of the contained to find the tokenized URL to  access the jupyter 
 docker logs tais
 ```
 
-
-
-
 Monitor the GPU usage with nvidia-smi **in another terminal tab**.
 ```
 docker exec -it tais watch -n 1 nvidia-smi
+```
+
+
+
+## Singularity
+
+```
+your_local_system$ docker save flair_baseline -o flair_baseline.tar 
+
+singularity build --sandbox flair_baseline docker-archive://flair_baseline.tar
 ```
 
 
