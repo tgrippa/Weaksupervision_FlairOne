@@ -23,6 +23,9 @@ WORKDIR /opt/app
 RUN pip install -r requirements.txt
 WORKDIR /
 
+# Install wandb logger for pytorch
+RUN pip install wandb
+
 # Install Jupyterlab
 RUN pip install jupyterlab 
 ENV JUPYTER_ENABLE_LAB=yes
