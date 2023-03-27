@@ -12,8 +12,6 @@ maintainer="tais.grippa@ulb.be"
 ## Additionals 
 
 
-
-
 DEBIAN_FRONTEND=noninteractive
 
 # Add user
@@ -38,12 +36,6 @@ PATH="$HOME/.local/bin:$PATH"
 
 # Install WanDB Logger
 pip install wandb
-
-# Add Tini. Tini operates as a process subreaper for jupyter. This prevents
-# kernel crashes.
-TINI_VERSION=v0.18.0
-curl https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini -o /usr/bin/tini/tini
-chmod +x /usr/bin/tini
 
 # Reduce image size
 apt-get autoremove -y && \
