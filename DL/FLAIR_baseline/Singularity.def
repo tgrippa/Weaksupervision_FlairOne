@@ -1,0 +1,64 @@
+Bootstrap: docker
+From: pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime
+Stage: spython-base
+
+%files
+requirements.txt /opt/app/requirements.txt
+%labels
+maintainer="tais.grippa@ulb.be"
+%post
+### DOCKER FILE DESCRIPTION 
+## Base image: pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime; 
+## Additionals 
+
+
+
+
+DEBIAN_FRONTEND=noninteractive
+
+# Add user
+useradd -ms /bin/bash tais
+
+# Update & upgrade system
+apt-get -y update && \
+apt-get -y upgrade
+apt-get install -y --no-install-recommends apt-utils
+
+# Install FLAIR-One baseline requirements
+mkdir -p /opt/app
+cd /opt/app
+pip install -r requirements.txt
+mkdir -p /
+cd /
+
+# Install Jupyterlab
+pip install jupyterlab
+JUPYTER_ENABLE_LAB=yes
+PATH="$HOME/.local/bin:$PATH"
+
+# Add Tini. Tini operates as a process subreaper for jupyter. This prevents
+# kernel crashes.
+TINI_VERSION=v0.18.0
+curl https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini -o /usr/bin/tini/tini
+chmod +x /usr/bin/tini
+
+# Reduce image size
+apt-get autoremove -y && \
+apt-get clean -y
+	
+# Define user and working directory
+su -  tais # USER tais
+mkdir -p /home/tais
+cd /home/tais
+
+# Define entrypoint (Tini) and default command for new docker instance
+%environment
+export JUPYTER_ENABLE_LAB=yes
+export PATH="$HOME/.local/bin:$PATH"
+export TINI_VERSION=v0.18.0
+%runscript
+cd /home/tais
+exec /usr/bin/tini -- jupyter lab --port=8888 --no-browser --ip=0.0.0.0 --allow-root "$@"
+%startscript
+cd /home/tais
+exec /usr/bin/tini -- jupyter lab --port=8888 --no-browser --ip=0.0.0.0 --allow-root "$@"
