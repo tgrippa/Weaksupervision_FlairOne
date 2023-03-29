@@ -1,6 +1,7 @@
 Build the Docker image
 ```
-docker build -t grass_r_jupyter .
+# To build the image with your user name UID and GID 
+docker build --build-arg UNAME=$USER --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t grass_r_jupyter .
 ```
 
 Launch the Docker container with mapping of port 88888, volumes and display capabilities
