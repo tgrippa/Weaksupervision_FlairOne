@@ -38,7 +38,7 @@ pip install wandb
 apt-get autoremove -y && \
 apt-get clean -y
 	
-# Define entrypoint (Tini) and default command for new docker instance
+# Define default command for new container instance
 %environment
 export JUPYTER_ENABLE_LAB=yes
 export PATH="$HOME/.local/bin:$PATH"
