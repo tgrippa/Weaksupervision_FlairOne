@@ -8,9 +8,13 @@ FROM ubuntu:jammy-20220531
 LABEL maintainer="tais.grippa@ulb.be"
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG UNAME=tais
+ARG UID=1000
+ARG GID=1000
 
 # Add user
-RUN useradd -ms /bin/bash tais
+RUN groupadd -g $GID -o $UNAME
+RUN useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
 
 # Update & upgrade system
 RUN apt-get -y update && \
@@ -68,8 +72,8 @@ RUN apt-get autoremove -y && \
     apt-get clean -y
 
 # Change user and workdir
-USER tais
-WORKDIR /home/tais
+USER $UNAME
+WORKDIR /home/$UNAME
 
 # Install GRASS GIS Add-ons for the user
 RUN mkdir -p /tmp/tmpGRASSDATA/
@@ -82,3 +86,4 @@ RUN grass /tmp/tmpGRASSDATA/tmpLocation/PERMANENT --exec g.extension r.zonal.cla
 # Define entrypoint and cmd
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["jupyter", "lab", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
+
